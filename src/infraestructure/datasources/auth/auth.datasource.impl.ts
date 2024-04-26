@@ -6,7 +6,6 @@ import {
   LoginDto,
   RegisterDto,
   UserEntity,
-  UsersRepository,
 } from "../../../domain";
 
 type HashPassword = (password: string, salt: number) => Promise<string>;
