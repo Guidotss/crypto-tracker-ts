@@ -18,13 +18,38 @@ type ComparePassword = (
 export class AuthDataSourceImpl implements AuthDataSource {
   constructor(
     private readonly hashPassword: HashPassword = BcryptAdapter.hashPassword,
-    private readonly comparePassword: ComparePassword = BcryptAdapter.comparePassword,
-    private readonly usersRepository: UsersRepository
+    private readonly comparePassword: ComparePassword = BcryptAdapter.comparePassword
   ) {}
+
+  private async getUserByEmail(email: string): Promise<UserEntity | null> {
+    try {
+      const user = await userModel.findFirst({
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (error: unknown) {
+      throw CustomError.internal((error as Error).message);
+    }
+  }
+
+  private async getUserById(id: string): Promise<UserEntity | null> {
+    try {
+      const user = await userModel.findFirst({
+        where: {
+          id,
+        },
+      });
+      return user;
+    } catch (error: unknown) {
+      throw CustomError.internal((error as Error).message);
+    }
+  }
 
   async register(newUserData: RegisterDto): Promise<UserEntity> {
     const { name, lastName, email, password } = newUserData;
-    const checkUser = await this.usersRepository.getUserByEmail(email);
+    const checkUser = await this.getUserByEmail(email);
     if (checkUser) {
       throw CustomError.badRequest("User already exists");
     }
@@ -42,7 +67,7 @@ export class AuthDataSourceImpl implements AuthDataSource {
   }
   async login(userData: LoginDto): Promise<UserEntity> {
     const { email, password } = userData;
-    const user = await this.usersRepository.getUserByEmail(email);
+    const user = await this.getUserByEmail(email);
     if (!user) {
       throw CustomError.unauthorized("Invalid email or password");
     }

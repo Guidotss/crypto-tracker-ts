@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { AuthRepository, CustomError, RegisterDto } from "../../domain";
 
 export class AuthController {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(private readonly authRepository: AuthRepository) {
+    this.authRepository = authRepository;
+  }
 
   private handleError = (error: unknown, res: Response) => {
     if (error instanceof CustomError) {

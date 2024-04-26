@@ -1,12 +1,18 @@
 import { Router } from "express";
+import { AuthController } from "./controller";
+import {
+  AuthDataSourceImpl,
+  AuthRepositoryImpl,
+} from "../../infraestructure";
 
 export class AuthRoutes {
   static get routes() {
     const router = Router();
+    
+    const authDataSource = new AuthDataSourceImpl();
+    const authRepository = new AuthRepositoryImpl(authDataSource);
 
-    router.post("/register", (req, res) => {
-      return res.json({ message: "User registered" });
-    });
+    const authController = new AuthController(authRepository);
 
     router.post("/login", (req, res) => {
       return res.json({ message: "User logged in" });
