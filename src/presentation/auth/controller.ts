@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthRepository, CustomError, RegisterDto } from "../../domain";
+import { AuthRepository, CustomError, LoginDto, RegisterDto } from "../../domain";
 
 export class AuthController {
   constructor(private readonly authRepository: AuthRepository) {
@@ -34,4 +34,21 @@ export class AuthController {
       this.handleError(error, res);
     }
   };
+
+  public login = async (req: Request, res: Response) => {
+    try { 
+      const [ error, loginDto ] = LoginDto.fromRequest(req.body); 
+      if(error){ 
+        throw CustomError.badRequest(error); 
+      }
+      const user = await this.authRepository.login(loginDto!); //TODO: Change this for a real implementation of the login method with login use-case
+      res.json({ 
+        ok: true, 
+        message: "User logged in", 
+        user: user 
+      });
+    }catch(error){ 
+      this.handleError(error, res);
+    }
+  }
 }

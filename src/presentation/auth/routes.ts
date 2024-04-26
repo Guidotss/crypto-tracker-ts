@@ -15,9 +15,7 @@ export class AuthRoutes {
 
     router.post("/register", authController.register);
 
-    router.post("/login", (req, res) => {
-      return res.json({ message: "User logged in" });
-    });
+    router.post("/login", authController.login);
 
     router.post("/forgot-password", (req, res) => {
       return res.json({ message: "Password recovery email sent" });
