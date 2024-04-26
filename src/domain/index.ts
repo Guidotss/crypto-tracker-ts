@@ -4,3 +4,4 @@ export * from "./repository";
 export * from "./dtos";
 export * from "./entities";
 export * from "./errors/custom.error"; 
+export * from "./use-cases";

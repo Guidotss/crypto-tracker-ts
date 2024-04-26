@@ -1,2 +1,3 @@
-export * from "./bcrtypt-adapter";
+export * from "./bcrypt-adapter";
 export * from "./envs"; 
+export * from "./jwt-adapter";
