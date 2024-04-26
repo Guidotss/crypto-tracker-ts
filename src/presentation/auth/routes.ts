@@ -11,8 +11,9 @@ export class AuthRoutes {
     
     const authDataSource = new AuthDataSourceImpl();
     const authRepository = new AuthRepositoryImpl(authDataSource);
-
     const authController = new AuthController(authRepository);
+
+    router.post("/register", authController.register);
 
     router.post("/login", (req, res) => {
       return res.json({ message: "User logged in" });
