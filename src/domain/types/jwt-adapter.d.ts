@@ -1,7 +1,7 @@
 export type Sign = (
-  payload: any,
+  payload: object,
   secret: string,
-  expiresIn = "1h"
+  expiresIn?: string
 ) => Promise<string | undefined>;
 
 export type Verify = <T>(

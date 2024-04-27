@@ -20,27 +20,23 @@ interface IRegisterUseCase {
 export class RegisterUseCase implements IRegisterUseCase {
   private readonly jwtSecret = envs.JWT_SECRET;
   constructor(
-      private readonly authRepository: AuthRepository, 
-    private readonly sing: Sign = JsonWebTokenAdapter.sign,
+    private readonly authRepository: AuthRepository,
+    private readonly sing: Sign = JsonWebTokenAdapter.Sign
   ) {}
   async execute(registerDto: RegisterDto): Promise<CustomResponse> {
-    try {
-      const user = await this.authRepository.register(registerDto);
-      const token = await this.sing(user.id, this.jwtSecret);
-      if (!token) throw CustomError.internal("Error generating token");
+    const user = await this.authRepository.register(registerDto);
+    const token = await this.sing({ _id: user.id }, this.jwtSecret);
+    if (!token) throw CustomError.internal("Error generating token");
 
-      return {
-        ok: true,
-        message: "User registered successfully",
-        token,
-        user: {
-          name: user.name,
-          lastName: user.lastName,
-          email: user.email,
-        },
-      };
-    } catch (error: unknown) {
-      throw CustomError.internal((error as Error).message);
-    }
+    return {
+      ok: true,
+      message: "User registered successfully",
+      token,
+      user: {
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+      },
+    };
   }
 }

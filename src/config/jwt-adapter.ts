@@ -1,20 +1,21 @@
 import jwt from "jsonwebtoken";
 
 export class JsonWebTokenAdapter {
-  static async sign(
-    payload: any,
+  static async Sign(
+    payload: object,
     secret: string,
-    expiresIn = "1h"
+    expiresIn= "1h"
   ): Promise<string | undefined> {
+    console.log(expiresIn); 
     return new Promise((resolve, reject) => {
       jwt.sign(payload, secret, { expiresIn }, (err, token) => {
-        if (err) reject(err as Error);
+        if (err) reject(err);
         resolve(token);
       });
     });
   }
 
-  static async verify<T>(
+  static async Verify<T>(
     token: string,
     secret: string
   ): Promise<T | undefined> {

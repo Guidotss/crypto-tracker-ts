@@ -22,7 +22,7 @@ export class AuthController {
           ok: false,
           error: error.message,
         });
-    }else { 
+    } else {
       res
         .header("Content-Type", "application/json")
         .status(500)
@@ -35,24 +35,32 @@ export class AuthController {
   };
 
   public register = (req: Request, res: Response) => {
-    const [error, registerDto] = RegisterDto.fromRequest(req.body);
-    if (error) {
-      throw CustomError.badRequest(error);
+    try {
+      const [error, registerDto] = RegisterDto.fromRequest(req.body);
+      if (error) {
+        throw CustomError.badRequest(error);
+      }
+      new RegisterUseCase(this.authRepository)
+        .execute(registerDto!)
+        .then((response) => res.json(response))
+        .catch((error) => this.handleError(error, res));
+    } catch (error) {
+      this.handleError(error, res);
     }
-    new RegisterUseCase(this.authRepository)
-      .execute(registerDto!)
-      .then((response) => res.json(response))
-      .catch((error) => this.handleError(error, res));
   };
 
   public login = (req: Request, res: Response) => {
-    const [error, loginDto] = LoginDto.fromRequest(req.body);
-    if (error) {
-      throw CustomError.badRequest(error);
+    try {
+      const [error, loginDto] = LoginDto.fromRequest(req.body);
+      if (error) {
+        throw CustomError.badRequest(error);
+      }
+      new LoginUseCase(this.authRepository)
+        .execute(loginDto!)
+        .then((data) => res.json(data))
+        .catch((error) => this.handleError(error, res));
+    } catch (error) {
+      this.handleError(error, res);
     }
-    new LoginUseCase(this.authRepository)
-      .execute(loginDto!)
-      .then((data) => res.json(data))
-      .catch((error) => this.handleError(error, res));
   };
 }
