@@ -7,4 +7,11 @@ export type Sign = (
 export type Verify = <T>(
   token: string,
   secret: string
-) => Promise<T | undefined>;
+) => Promise<T>;
+
+
+export type TokenData = {
+  _id: string; 
+  iat: number; 
+  exp: number;
+}

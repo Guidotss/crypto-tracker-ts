@@ -18,7 +18,7 @@ export class JsonWebTokenAdapter {
   static async Verify<T>(
     token: string,
     secret: string
-  ): Promise<T | undefined> {
+  ): Promise<T> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, secret, (err, decoded) => {
         if (err) reject(err as Error);

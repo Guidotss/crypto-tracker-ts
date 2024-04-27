@@ -4,6 +4,8 @@ import {
   CustomError,
   LoginDto,
   LoginUseCase,
+  RefreshTokenDto,
+  RefreshTokenUseCase,
   RegisterDto,
   RegisterUseCase,
 } from "../../domain";
@@ -57,6 +59,23 @@ export class AuthController {
       }
       new LoginUseCase(this.authRepository)
         .execute(loginDto!)
+        .then((data) => res.json(data))
+        .catch((error) => this.handleError(error, res));
+    } catch (error) {
+      this.handleError(error, res);
+    }
+  };
+
+  public refreshToken = (req: Request, res: Response) => {
+    try {
+      const [error, refreshTokenDto] = RefreshTokenDto.fromHeader(
+        req.headers.authorization!
+      );
+      if (error) {
+        throw CustomError.badRequest(error);
+      }
+      new RefreshTokenUseCase(this.authRepository)
+        .execute(refreshTokenDto!)
         .then((data) => res.json(data))
         .catch((error) => this.handleError(error, res));
     } catch (error) {

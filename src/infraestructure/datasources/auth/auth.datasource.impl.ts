@@ -33,7 +33,7 @@ export class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
-  private async getUserById(id: string): Promise<UserEntity | null> {
+  async getUserById(id: string): Promise<UserEntity | null> {
     try {
       const user = await userModel.findFirst({
         where: {
