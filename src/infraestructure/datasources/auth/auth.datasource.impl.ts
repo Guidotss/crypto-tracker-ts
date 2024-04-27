@@ -67,6 +67,7 @@ export class AuthDataSourceImpl implements AuthDataSource {
   async login(userData: LoginDto): Promise<UserEntity> {
     const { email, password } = userData;
     const user = await this.getUserByEmail(email);
+    
     if (!user) {
       throw CustomError.unauthorized("Invalid email or password");
     }

@@ -22,6 +22,15 @@ export class AuthController {
           ok: false,
           error: error.message,
         });
+    }else { 
+      res
+        .header("Content-Type", "application/json")
+        .status(500)
+        .json({
+          ok: false,
+          error: "Internal server error",
+          message: (error as Error).message,
+        });
     }
   };
 
@@ -36,7 +45,7 @@ export class AuthController {
       .catch((error) => this.handleError(error, res));
   };
 
-  public login = async (req: Request, res: Response) => {
+  public login = (req: Request, res: Response) => {
     const [error, loginDto] = LoginDto.fromRequest(req.body);
     if (error) {
       throw CustomError.badRequest(error);

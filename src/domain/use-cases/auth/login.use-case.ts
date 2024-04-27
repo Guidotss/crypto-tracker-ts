@@ -25,23 +25,19 @@ export class LoginUseCase implements ILoginUseCase {
   ) {}
 
   async execute(loginDto: LoginDto): Promise<CustomResponse> {
-    try {
-      const user = await this.authRepository.login(loginDto);
-      const token = await this.sign(user.id, this.jwtSecret);
-      if (!token) throw new Error("Error generating token");
+    const user = await this.authRepository.login(loginDto);
+    const token = await this.sign(user.id, this.jwtSecret);
+    if (!token) throw new Error("Error generating token");
 
-      return {
-        ok: true,
-        message: "User logged in",
-        token,
-        user: {
-          name: user.name,
-          email: user.email,
-          lastName: user.lastName,
-        },
-      };
-    } catch (error: unknown) {
-      throw new Error((error as Error).message);
-    }
+    return {
+      ok: true,
+      message: "User logged in",
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        lastName: user.lastName,
+      },
+    };
   }
 }
